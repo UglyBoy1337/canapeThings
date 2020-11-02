@@ -1,64 +1,6 @@
 <?php
 
-require './controllers/categoryController.php';
-require './controllers/goodsController.php';
-
-$itemsOnPage = 3;
-$pagesCategoryCount = getCategoryCountPages($itemsOnPage);
-$page = 1;
-
-if ($pagesCategoryCount <= 0) {header('Location: http://catalog-site.ru/?categoryPage=1');exit;}
-
-if (isset($_GET['categoryPage']) && $_GET['categoryPage'] >= 1 && $_GET['categoryPage'] <= $pagesCategoryCount && is_numeric($_GET['categoryPage'])) {
-    $page = $_GET['categoryPage'];
-    $itemsOnPage = 3;
-    $from = ($page - 1) * $itemsOnPage;
-    $categories = findCategoryPaginationPages($from, $itemsOnPage);
-} else {
-    if (isset($_POST['search_product'])) {
-        $id = $_POST['search_id'];
-        $errmsg = "Данного товара не существует";
-        if(is_numeric($id))
-        {
-            $productinfo = findProduct($id);
-            $itemsOnPage = 3;
-            $from = ($page - 1) * $itemsOnPage;
-            $categories = findCategoryPaginationPages($from, $itemsOnPage);
-        }
-    } else {
-        if(isset($_POST['sortBy']))
-        {
-            $itemsOnPage = 10;
-            $from = ($page - 1) * $itemsOnPage;
-
-            if($_POST['orderBy'] == "a-z")
-            {
-                $categories = findCategoryPaginationPageOrder($from,$itemsOnPage,"a-z");
-            }
-            else
-            {
-                $categories = findCategoryPaginationPageOrder($from,$itemsOnPage,"z-a");
-            }
-
-        }
-        if(isset($_GET['categoryPage'])) {
-            header('Location: http://catalog-site.ru/404.php');
-        }
-        if(isset($_POST['default']))
-        {
-            $itemsOnPage = 3;
-            $from = ($page - 1) * $itemsOnPage;
-            $categories = findCategoryPaginationPages($from, $itemsOnPage);
-        }
-        if(!isset($_POST['sortBy']) && !isset($_POST['default']))
-        {
-            $itemsOnPage = 3;
-            $from = ($page - 1) * $itemsOnPage;
-            $categories = findCategoryPaginationPages($from, $itemsOnPage);
-        }
-    }
-}
-
+require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
 
 ?>
 
@@ -68,8 +10,8 @@ if (isset($_GET['categoryPage']) && $_GET['categoryPage'] >= 1 && $_GET['categor
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/default.css">
     <title>catalog-site</title>
 </head>
 
@@ -101,7 +43,7 @@ if (isset($_GET['categoryPage']) && $_GET['categoryPage'] >= 1 && $_GET['categor
             { ?>
                 <div class="b-item">
                     <div class="item__img">
-                        <img src="img/default-good.png" alt="default photo">
+                        <img src="../img/default-good.png" alt="default photo">
                     </div>
                     <div class="item__title">
                         <?php echo $category['categoryName'] ?>
@@ -110,7 +52,7 @@ if (isset($_GET['categoryPage']) && $_GET['categoryPage'] >= 1 && $_GET['categor
                         <?php echo $category['categoryShortDescr'] ?>
                     </div>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/about.php?category=<?php echo $category['categoryId'] . "&page=1" ?>">Подробнее</a>
+                        <a href="http://catalog-site.ru/views/about.php?category=<?php echo $category['categoryId'] . "&page=1" ?>">Подробнее</a>
                     </div>
                 </div>
             <?php

@@ -1,5 +1,5 @@
 <?php
-header("HTTP/1.1 404 Not Found");
+    header("HTTP/1.1 404 Not Found");
 ?>
 
 <!DOCTYPE html>
@@ -8,8 +8,8 @@ header("HTTP/1.1 404 Not Found");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/default.css">
     <title>catalog-site</title>
 </head>
 

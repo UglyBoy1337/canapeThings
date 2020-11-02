@@ -1,21 +1,5 @@
 <?php
-
-require './controllers/categoryController.php';
-require './controllers/goodsController.php';
-require './controllers/goods_categoryController.php';
-
-if(isset($_GET['id']) && $_GET['id'] >= 1 && $_GET['id']  && is_numeric($_GET['id']))
-{
-    $productId = $_GET['id'];
-}
-else{header('Location: http://catalog-site.ru/404.php');exit;}
-
-$product = findProduct($productId = $_GET['id']);
-
-if($product == false || $product['flag_active'] == 0){header('Location: http://catalog-site.ru/404.php');exit;}
-
-$productcategories = findProductCategory($productId);
-
+    require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/ProductController.php';
 ?>
 
 <!DOCTYPE html>
@@ -24,8 +8,8 @@ $productcategories = findProductCategory($productId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/default.css">
     <title>catalog-site</title>
 </head>
 
@@ -44,7 +28,7 @@ $productcategories = findProductCategory($productId);
                 <?php echo $product['goodName'] ?>
             </div>
             <div class="product__img">
-                <img src="img/default-good.png" alt="Фото товара">
+                <img src="../img/default-good.png" alt="Фото товара">
             </div>
             <div class="product__fulldescr">
                 <p>Полное описание товара</p>
@@ -64,11 +48,11 @@ $productcategories = findProductCategory($productId);
                     foreach($productcategories as $category)
                     {
                     ?>
-                    <a href="http://catalog-site.ru/about.php?category=<?php echo $category['categoryId'];?>&page=1"><?php echo $category['categoryName'];?></a>
+                    <a href="http://catalog-site.ru/views/about.php?category=<?php echo $category['categoryId'];?>&page=1"><?php echo $category['categoryName'];?></a>
                     <?php
                     }
                     ?>
-                <a href="http://catalog-site.ru/about.php?category=2&page=1" class="nav__link nav__link--product">Назад</a>
+                <a href="http://catalog-site.ru/views/about.php?category=2&page=1" class="nav__link nav__link--product">Назад</a>
             </div>
         </div>
     </div>

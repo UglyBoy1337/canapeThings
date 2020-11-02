@@ -1,31 +1,6 @@
 <?php
 
-require './controllers/categoryController.php';
-require './controllers/goodsController.php';
-
-$itemsOnPage = 3;
-$categoryPagesCount = findActiveCategoryCount();
-
-if ($categoryPagesCount <= 0) {header('Location: http://catalog-site.ru/404.php');exit;}
-
-if (isset($_GET['category']) && $_GET['category'] >= 1 && $_GET['category'] <= $categoryPagesCount+1 && is_numeric($_GET['category']) 
-&& isset($_GET['page']) && $_GET['page'] >= 1 && $_GET['page'] <= getGoodsCountPages($itemsOnPage,$_GET['category']) 
-&& is_numeric($_GET['page']))
-{
-
-    $categoryPage= $_GET['category'];
-    $goodsPage = $_GET['page'];
-    
-} else {
-    header('Location: http://catalog-site.ru/404.php');
-    exit;
-}
-
-$from = ($goodsPage - 1) * $itemsOnPage;
-$goods = findGoodsOnCategory($from,$itemsOnPage, $_GET['category']);
-
-$categoryName = findCategoryName($categoryPage);
-$categoryFullDescr = findCategoryFullDescr($categoryPage);
+require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/GoodsController.php';
 
 ?>
 
@@ -35,8 +10,8 @@ $categoryFullDescr = findCategoryFullDescr($categoryPage);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/default.css">
     <title>catalog-site</title>
 </head>
 
@@ -61,7 +36,7 @@ $categoryFullDescr = findCategoryFullDescr($categoryPage);
             { ?>
                 <div class="b-item">
                     <div class="item__img">
-                        <img src="img/default-good.png" alt="default photo">
+                        <img src="../img/default-good.png" alt="default photo">
                     </div>
                     <div class="item__title">
                     <?php echo $good['goodName']?>
@@ -92,7 +67,7 @@ $categoryFullDescr = findCategoryFullDescr($categoryPage);
             <?php
             }?>
         </div>
-        <a href="http://catalog-site.ru/index.php" class="nav__link">Назад</a>
+        <a href="http://catalog-site.ru/views/index.php" class="nav__link">Назад</a>
     </div>
 
 </body>

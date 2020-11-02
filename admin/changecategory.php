@@ -1,44 +1,6 @@
 <?php
 
-require "../controllers/categoryController.php";
-require "../controllers/goodsController.php";
-require "../controllers/goods_categoryController.php";
-
-$categoryCount = findCategoryCount();
-$errmsg = "Не удалось выполнить обновление, проверьте корректность входных данных";
-$succmsg = "Категория успешно обновлена!";
-
-if(isset($_POST['saveCategory']))
-{
-    $newCategoryName = $_POST['newCategoryName'];
-    $newCategoryShortDescr = $_POST['newCategoryShortDescr'];
-    $newCategoryFullDecr = $_POST['newCategoryFullDescr'];
-    $newCategoryFlagActive = $_POST['newCategoryFlagActive'];
-    $categoryId = $_POST['categoryId'];
-
-    $result = updateCategory($categoryId,$newCategoryName,$newCategoryShortDescr,$newCategoryFullDecr,$newCategoryFlagActive);
-
-    if($result == true)
-    {
-        header('Location: http://catalog-site.ru/admin/changecategory.php?category=' . $_POST['categoryId'] . "&succ");
-    }
-    else{
-        header('Location: http://catalog-site.ru/admin/changecategory.php?category=' . $_POST['categoryId'] . "&err");
-    }
-
-}
-else
-{
-    if (isset($_GET['category']) && $_GET['category'] >= 1 && $_GET['category']  && is_numeric($_GET['category']) && $_GET['category'] <= $categoryCount) {
-        $currentCategory = $_GET['category'];
-    } else {
-        header('Location: http://catalog-site.ru/404.php');
-        exit;
-    }  
-
-    $categoryObj = findCategory($currentCategory);
-}
-
+require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
 
 ?>
 

@@ -1,38 +1,6 @@
 <?php
 
-require '../controllers/categoryController.php';
-require '../controllers/goodsController.php';
-require '../controllers/goods_categoryController.php';
-
-$itemsOnPage = 3;
-$pagesCategoryCount = getCategoryCountPagesAdmin($itemsOnPage);
-$page = 1;
-
-if ($pagesCategoryCount <= 0) {header('Location: http://catalog-site.ru/?categoryPage=1');exit;}
-
-if (isset($_GET['categoryPage']) && $_GET['categoryPage'] >= 1 && $_GET['categoryPage'] <= $pagesCategoryCount && is_numeric($_GET['categoryPage'])) {
-    $page = $_GET['categoryPage'];
-} else {
-    if (isset($_POST['category__addCategory'])) { 
-
-        $categoryName = $_POST['categoryName'];
-        $categoryShortDescr = $_POST['categoryShortDescr'];
-        $categoryFullDescr = $_POST['categoryFullDescr'];
-        $flag_active = $_POST['categoryFlagActive'];
-        $errmsg = "Не удалось выполнить добавление, проверьте корректность входных данных";
-        $succmsg = "Категория успешно добавлена!";
-        
-        $createCategoryResult = createNewCategory($categoryName,$categoryShortDescr,$categoryFullDescr,$flag_active);
-    } 
-    else {
-        if (isset($_GET['categoryPage'])) {
-            header('Location: http://catalog-site.ru/404.php');
-        }
-    }
-}
-
-$from = ($page - 1) * $itemsOnPage;
-$categories = findCategoryPaginationPagesAdmin($from, $itemsOnPage);
+require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
 
 ?>
 
@@ -75,13 +43,13 @@ $categories = findCategoryPaginationPagesAdmin($from, $itemsOnPage);
                     {
                     ?>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/admin/changegoods.php?category=<?php echo $category['categoryId'] . "&page=1" ?>">Добавить товары</a>
+                        <a href="http://catalog-site.ru/admin/changegoods.php?change&category=<?php echo $category['categoryId'] . "&page=1" ?>">Добавить товары</a>
                     </div>
                     <?php 
                     } 
                     ?>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/admin/changecategory.php?category=<?php echo $category['categoryId']?>">Редактировать</a>
+                        <a href="http://catalog-site.ru/admin/changecategory.php?change&category=<?php echo $category['categoryId']?>">Редактировать</a>
                     </div>
                 </div>
             <?php
