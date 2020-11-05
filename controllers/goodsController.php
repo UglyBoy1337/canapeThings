@@ -1,25 +1,56 @@
 <?php 
-    require  $_SERVER['DOCUMENT_ROOT'] . '/models/Good.php';
+
+    require  $_SERVER['DOCUMENT_ROOT'] . '/components/Controller.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/components/Model.php';
     require  $_SERVER['DOCUMENT_ROOT'] . '/models/Category.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/models/Good.php';
 
-    $itemsOnPage = 3;
-    $categoryPagesCount = findActiveCategoryCount();
+    class GoodsController extends Controller{
 
-    if ($categoryPagesCount <= 0) {header('Location: http://catalog-site.ru/views/404.php');exit;}
+        public $categoryPagesCount;
+        public $goods;
+        public $categoryName;
+        public $categoryFullDescr;
+        public $goodCountPages;
+        public $currentPage = 1;
 
-        if (isset($_GET['category']) && $_GET['category'] >= 1 && $_GET['category'] <= $categoryPagesCount+1 && is_numeric($_GET['category']) 
-        && isset($_GET['page']) && $_GET['page'] >= 1 && $_GET['page'] <= getGoodsCountPages($itemsOnPage,$_GET['category']) 
-        && is_numeric($_GET['page']))
-        {
-            $categoryPage= $_GET['category'];
-            $goodsPage = $_GET['page'];
+        function __construct() {
+            if(empty($_GET) && empty($_POST)) { 
+                $this->init(); 
+            }else{
+                $this->parseQuery();
+            }
+        }
+
+        function init(){ header('Location: http://catalog-site.ru/views/404.php');exit; }
+
+        function parseQuery(){
             
-        } else {header('Location: http://catalog-site.ru/views/404.php');exit;
+            $categoryModel = new CategoryModel;
+            $goodModel = new GoodModel;
+
+            $itemsOnPage = 3;
+
+            $this->goodCountPages = $goodModel->getGoodsCountPages($itemsOnPage,$_GET['category']);
+
+            $this->categoryPagesCount = $categoryModel->findActiveCategoryCount();
+        
+            if (isset($_GET['category']) && $_GET['category'] >= 1 && $_GET['category'] <= $this->categoryPagesCount+1 && is_numeric($_GET['category']) 
+            && isset($_GET['page']) && $_GET['page'] >= 1 && $_GET['page'] <= $this->goodCountPages
+            && is_numeric($_GET['page']))
+            {
+                $categoryPage= $_GET['category'];
+                $this->currentPage = $_GET['page'];
+            
+            } else { header('Location: http://catalog-site.ru/views/404.php');exit;}
+
+            $from = ($this->currentPage - 1) * $itemsOnPage;
+            $this->goods = $goodModel->findGoodsOnCategory($from,$itemsOnPage, $_GET['category']);
+            
+            $this->categoryName = $categoryModel->findCategoryName($categoryPage);
+            $this->categoryFullDescr = $categoryModel->findCategoryFullDescr($categoryPage);
+        }
+
     }
 
-    $from = ($goodsPage - 1) * $itemsOnPage;
-    $goods = findGoodsOnCategory($from,$itemsOnPage, $_GET['category']);
-
-    $categoryName = findCategoryName($categoryPage);
-    $categoryFullDescr = findCategoryFullDescr($categoryPage);
 ?>

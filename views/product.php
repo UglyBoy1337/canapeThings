@@ -1,5 +1,7 @@
 <?php
     require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/ProductController.php';
+
+    $ProducttController = new ProductController;
 ?>
 
 <!DOCTYPE html>
@@ -25,27 +27,27 @@
     <div class="b-product">
         <div class="product__wrapper">
             <div class="product__title">
-                <?php echo $product['goodName'] ?>
+                <?php echo $ProducttController->product['goodName'] ?>
             </div>
             <div class="product__img">
                 <img src="../img/default-good.png" alt="Фото товара">
             </div>
             <div class="product__fulldescr">
                 <p>Полное описание товара</p>
-                <?php echo $product['goodFullDescr'] ?>
+                <?php echo $ProducttController->product['goodFullDescr'] ?>
             </div>
             <div class="product__counts">
                 <p>Кол-во товара на складе</p>
-                <?php echo $product['goodAmount'] ?>
+                <?php echo $ProducttController->product['goodAmount'] ?>
             </div>
             <div class="product__order">
                 <p>Возможность заказать в случае отсутсвия</p>
-                <?php if($product['flag_order'] == 1){echo "Есть";}else{echo "Нет";}?>
+                <?php if($ProducttController->product['flag_order'] == 1){echo "Есть";}else{echo "Нет";}?>
             </div>
             <div class="product__categories">
                <p>Все категории в которых есть товар</p>
                <?php 
-                    foreach($productcategories as $category)
+                    foreach($ProducttController->productcategories as $category)
                     {
                     ?>
                     <a href="http://catalog-site.ru/views/about.php?category=<?php echo $category['categoryId'];?>&page=1"><?php echo $category['categoryName'];?></a>

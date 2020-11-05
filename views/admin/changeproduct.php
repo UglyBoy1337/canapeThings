@@ -2,6 +2,8 @@
 
 require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
 
+$adminProductController = new AdminProductController;
+
 ?>
 
 <!DOCTYPE html>
@@ -10,8 +12,8 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="../../css/normalize.css">
+    <link rel="stylesheet" href="../../css/default.css">
     <title>catalog-site</title>
 </head>
 
@@ -28,28 +30,28 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
     <div class="b-change">
         <div class="change__wrapper">
             <div class="change__title">
-                Вы редактируете товар:<?php echo $currentProduct['goodName'] ?>
+                Вы редактируете товар:<?php echo $adminProductController->currentProduct['goodName'] ?>
             </div>
             <form action="changeproduct.php" method="POST">
-            <textarea class="hidden" name="productId" rows="1"><?php echo $currentProduct['goodId']?></textarea>
+            <textarea class="hidden" name="productId" rows="1"><?php echo $adminProductController->currentProduct['goodId']?></textarea>
                 <div class="change__field-name">
                     Изменить название товара
                 </div>
-                <textarea name="newProductName" cols="30" rows="1" required><?php echo $currentProduct['goodName']?></textarea>
+                <textarea name="newProductName" cols="30" rows="1" required><?php echo $adminProductController->currentProduct['goodName']?></textarea>
                 <div class="change__field-name">
                     Изменить краткое описание товара
                 </div>
-                <textarea name="newProductShortDescr" cols="30" rows="5" required><?php echo $currentProduct['goodShortDescr']?></textarea>
+                <textarea name="newProductShortDescr" cols="30" rows="5" required><?php echo $adminProductController->currentProduct['goodShortDescr']?></textarea>
                 <div class="change__field-name">
                     Изменить полное описание товара
                 </div>
-                <textarea name="newProductFullDescr" cols="30" rows="5" required><?php echo $currentProduct['goodFullDescr']?></textarea>
+                <textarea name="newProductFullDescr" cols="30" rows="5" required><?php echo $adminProductController->currentProduct['goodFullDescr']?></textarea>
                 <div class="change__field-name">
                     Изменить активность товара
                 </div>
                 <select name="newProductActiveFlag">
                  <?php 
-                 if($currentProduct['flag_active'] == 1)
+                 if($adminProductController->currentProduct['flag_active'] == 1)
                  {
                  ?>
                  <option value="1">Активна</option>
@@ -66,13 +68,13 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
                 <div class="change__field-name">
                     Изменить кол-во товара
                 </div>
-                <input type="number" value="<?php echo $currentProduct['goodAmount'] ?>" required placeholder="<?php echo $currentProduct['goodAmount']; ?>" name="newProductAmount">
+                <input type="number" value="<?php echo $adminProductController->currentProduct['goodAmount'] ?>" required placeholder="<?php echo $adminProductController->currentProduct['goodAmount']; ?>" name="newProductAmount">
                 <div class="change__field-name">
                     Возможность заказать в случае отстуствия
                 </div>
                 <select name="newProductOrder">
                  <?php 
-                 if($currentProduct['flag_order'] == 1)
+                 if($adminProductController->currentProduct['flag_order'] == 1)
                  {
                  ?>
                  <option value="1">Можно</option>
@@ -87,10 +89,10 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
                 ?>
                 </select>
                 <div class="change__title">Категории товара:</div>
-                <?php foreach($categories as $category)
+                <?php foreach($adminProductController->categories as $category)
                     {
                         $isExists = false;
-                        foreach($currentProductCategories as $currentcategory)
+                        foreach($adminProductController->currentProductCategories as $currentcategory)
                         {
                            if($category['categoryName'] == $currentcategory['categoryName'])
                            {
@@ -114,10 +116,10 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
                       }
                     ?>
                 <button type="submit" name="saveProduct">Сохранить изменения</button>
-                <a href="http://catalog-site.ru/admin/index.php?categoryPage=1" class="nav__link nav__link--update-category">Назад</a>
+                <a href="http://catalog-site.ru/views/admin/index.php?categoryPage=1" class="nav__link nav__link--update-category">Назад</a>
             </form>
             <div class="change__errmsg">
-                <?php if(isset($_GET['succ'])) {echo $succmsg;} elseif(isset($_GET['err'])) echo $errmsg; ?>
+                <?php echo $adminProductController->productSaveMessage ?>
             </div>
         </div>
      </div>

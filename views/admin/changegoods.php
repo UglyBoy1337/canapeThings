@@ -2,6 +2,8 @@
 
 require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
 
+$adminGoodController = new AdminGoodsController;
+
 ?>
 
 <!DOCTYPE html>
@@ -10,8 +12,8 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="../../css/normalize.css">
+    <link rel="stylesheet" href="../../css/default.css">
     <title>catalog-site</title>
 </head>
 
@@ -27,17 +29,17 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
     <div class="b-main">
         <div class="main__wrapper">
             <div class="main__title">
-                Вы находитесь в категории товаров:<?php echo $categoryName ?>
+                Вы находитесь в категории товаров:<?php echo $adminGoodController->categoryName ?>
             </div>
             <div class="main__subtitle">
-                <span>Полное описание категории:</span> <?php echo $categoryFullDescr?>
+                <span>Полное описание категории:</span> <?php echo $adminGoodController->categoryFullDescr?>
             </div>
-            <?php foreach ($goods as $good)
+            <?php foreach ($adminGoodController->goods as $good)
                 { 
                 ?>
                 <div class="b-item">
                     <div class="item__img">
-                        <img src="../img/default-good.png" alt="default photo">
+                        <img src="../../img/default-good.png" alt="default photo">
                     </div>
                     <div class="item__title">
                     <?php echo $good['goodName']?>
@@ -46,23 +48,23 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
                     <?php echo $good['goodShortDescr']?>
                     </div>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/admin/changeproduct.php?id=<?php echo $good['goodId']?>">Редактировать товар</a>
+                        <a href="http://catalog-site.ru/views/admin/changeproduct.php?id=<?php echo $good['goodId']?>">Редактировать товар</a>
                     </div>
                 </div>
             <?php
             } 
-            if(getGoodsCountPages($itemsOnPage,$_GET['category']) > 1)
+            if($adminGoodController->pagesCategoryCount > 1)
             {
             ?>
                  <form action="index.php" method="GET">
-                     <?php if($goodsPage > 1) 
+                     <?php if($adminGoodController->currentPage > 1) 
                      { ?>
-                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $goodsPage-1;?>" class="main__link main__link--left">&#9668PrevPage</a>
+                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $adminGoodController->currentPage -1 ;?>" class="main__link main__link--left">&#9668PrevPage</a>
                      <?php 
                      } ?>
-                     <?php if($goodsPage < getGoodsCountPages($itemsOnPage,$_GET['category']))
+                     <?php if($adminGoodController->currentPage < $adminGoodController->pagesCategoryCount)
                      { ?>
-                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $goodsPage+1;?>" class="main__link main__link--right">NextPage&#9658</a>
+                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $adminGoodController->currentPage+1;?>" class="main__link main__link--right">NextPage&#9658</a>
                      <?php 
                      } ?>
                 </form>
@@ -77,7 +79,7 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
                     Форма добавления нового товара
                 </div>
                 <form action="changegoods.php" method="POST">
-                <textarea class="hidden" name="categoryId" rows="1"><?php echo $categoryPage ?></textarea>
+                <textarea class="hidden" name="categoryId" rows="1"><?php echo $_GET['category'] ?></textarea>
                     <div class="new-goods__subtitle">Имя товара:</div>
                     <input type="text" required placeholder="Введите имя товара" name="goodName">
                     <div class="new-goods__subtitle">Краткое описание товара:</div>
@@ -97,7 +99,7 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
                         <option value="0">Нет</option>
                     </select>
                     <div class="new-goods__subtitle">Категории товара:</div>
-                    <?php foreach($categories as $category)
+                    <?php foreach($adminGoodController->categories as $category)
                     {
                     ?>
                     <div class="new-goods__attr">
@@ -107,13 +109,13 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
                     <?php } ?>
                     <button type="submit" name="goodAdd">Добавить товар</button>
                     <div class="new-goods__errmsg">
-                    <?php if(isset($_GET['succ'])){echo $succmsg;}elseif(isset($_GET['err'])){echo $errmsg;}?>
+                    <?php echo $adminGoodController->goodCreateMsg?>
                     </div>
                 </form>
             </div>
         </div>
 
-        <a href="http://catalog-site.ru/admin/index.php" class="nav__link">Назад</a>
+        <a href="http://catalog-site.ru/views/admin/index.php" class="nav__link">Назад</a>
     </div>
 
 </body>

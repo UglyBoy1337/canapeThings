@@ -2,6 +2,8 @@
 
 require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/GoodsController.php';
 
+$goodController = new GoodsController;
+
 ?>
 
 <!DOCTYPE html>
@@ -27,12 +29,12 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/GoodsController.php';
     <div class="b-main">
         <div class="main__wrapper">
             <div class="main__title">
-                Вы находитесь в категории товаров:<?php echo $categoryName ?>
+                Вы находитесь в категории товаров:<?php echo $goodController->categoryName ?>
             </div>
             <div class="main__subtitle">
-                <span>Полное описание категории:</span> <?php echo $categoryFullDescr?>
+                <span>Полное описание категории:</span> <?php echo $goodController->categoryFullDescr?>
             </div>
-            <?php foreach ($goods as $good)
+            <?php foreach ($goodController->goods as $good)
             { ?>
                 <div class="b-item">
                     <div class="item__img">
@@ -50,17 +52,17 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/GoodsController.php';
                 </div>
             <?php 
             } 
-            if(getGoodsCountPages($itemsOnPage,$_GET['category']) > 1){
+            if($goodController->goodCountPages > 1){
             ?>
                  <form action="index.php" method="GET">
-                     <?php if($goodsPage > 1) 
+                     <?php if($goodController->currentPage > 1) 
                      { ?>
-                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $goodsPage-1;?>" class="main__link main__link--left">&#9668PrevPage</a>
+                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $goodController->currentPage-1;?>" class="main__link main__link--left">&#9668PrevPage</a>
                      <?php 
                      } ?>
-                     <?php if($goodsPage < getGoodsCountPages($itemsOnPage,$_GET['category']))
+                     <?php if($goodController->currentPage < $goodController->goodCountPages)
                      { ?>
-                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $goodsPage+1;?>" class="main__link main__link--right">NextPage&#9658</a>
+                    <a href="?category=<?php echo $_GET['category']?>&page=<?php echo $goodController->currentPage+1;?>" class="main__link main__link--right">NextPage&#9658</a>
                      <?php 
                      } ?>
                 </form>

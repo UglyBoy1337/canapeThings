@@ -2,6 +2,8 @@
 
 require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
 
+$CategoryConroller = new CategoryController;
+
 ?>
 
 <!DOCTYPE html>
@@ -32,14 +34,14 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
                     <option value="z-a">Сортировка Z-A</option>
                 </select>
                <button type="submit" name="sortBy">Отсортировать</button>
-               <button type="submit" name="default">Убрать сортировку</button>
+               <button type="submit" name="sortDefault" value="true">Убрать сортировку</button>
             </form>
         </div>
     </div>
 
     <div class="b-main">
         <div class="main__wrapper">
-            <?php foreach ($categories as $category) 
+            <?php foreach ($CategoryConroller->categories as $category) 
             { ?>
                 <div class="b-item">
                     <div class="item__img">
@@ -57,16 +59,16 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
                 </div>
             <?php
             }
-            if ($pagesCategoryCount > 1 && !isset($_POST['sortBy'])) 
+            if ($CategoryConroller->pagesCategoryCount > 1 && !isset($_POST['sortBy'])) 
             {
             ?>
                 <form action="index.php" method="GET">
-                    <?php if ($page > 1) { ?>
-                        <a href="?categoryPage=<?php echo $page - 1; ?>" class="main__link main__link--left">&#9668PrevPage</a>
+                    <?php if ($CategoryConroller->currentPage > 1) { ?>
+                        <a href="?categoryPage=<?php echo $CategoryConroller->currentPage - 1; ?>" class="main__link main__link--left">&#9668PrevPage</a>
                     <?php
                     } ?>
-                    <?php if ($page < $pagesCategoryCount) { ?>
-                        <a href="?categoryPage=<?php echo $page + 1; ?>" class="main__link main__link--right">NextPage&#9658</a>
+                    <?php if ($CategoryConroller->currentPage < $CategoryConroller->pagesCategoryCount) { ?>
+                        <a href="?categoryPage=<?php echo $CategoryConroller->currentPage + 1; ?>" class="main__link main__link--right">NextPage&#9658</a>
                     <?php
                     } ?>
                 </form>
@@ -90,27 +92,27 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
                     <button type="submit" name="search_product">Получить информацию</button>
                 </div>
             </form>
-            <?php if($productinfo != null && $productinfo['flag_active'] == 1)
+            <?php if($CategoryConroller->productinfo != null && $CategoryConroller->productinfo['flag_active'] == 1)
             {
             ?>
             <div class="search__output-wrapper">
                 <div class="search__output-id">
-                    Номер товара (id) : <?php echo $productinfo['goodId'] ?>
+                    Номер товара (id) : <?php echo $CategoryConroller->productinfo['goodId']; ?>
                 </div>
                 <div class="search__output-name">
-                    Имя товара: <?php echo $productinfo['goodName'] ?>
+                    Имя товара: <?php echo $CategoryConroller->productinfo['goodName'] ?>
                 </div>
                 <div class="search__output-short-descr">
-                    Краткое описание: <?php echo $productinfo['goodShortDescr'] ?>
+                    Краткое описание: <?php echo $CategoryConroller->productinfo['goodShortDescr'] ?>
                 </div>
                 <div class="search__output-full-descr">
-                    Полное описание: <?php echo $productinfo['goodFullDescr'] ?>
+                    Полное описание: <?php echo $CategoryConroller->productinfo['goodFullDescr'] ?>
                 </div>
                 <div class="search__output-amount">
-                    Колличество на складе: <?php echo $productinfo['goodAmount'] ?>
+                    Колличество на складе: <?php echo $CategoryConroller->productinfo['goodAmount'] ?>
                 </div>
                 <div class="search__output-order">
-                    Возможно заказа со склада: <?php if($productinfo['flag_order'] == 1){echo "Есть";}else{echo "Нет";}?>
+                    Возможно заказа со склада: <?php if($CategoryConroller->productinfo['flag_order'] == 1){echo "Есть";}else{echo "Нет";}?>
                 </div>
             </div>
             <?php
@@ -119,7 +121,7 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
             {
             ?>
             <div class="search__output-error">
-             <?php echo $errmsg; ?>
+                <?php echo $CategoryConroller->errmsg;?>
             </div>
             <?php
             }

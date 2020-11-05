@@ -1,47 +1,74 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/models/Category.php';
-require  $_SERVER['DOCUMENT_ROOT'] . '/models/Good.php';
-require  $_SERVER['DOCUMENT_ROOT'] . '/models/GoodCategory.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/components/Controller.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/components/Model.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/models/Category.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/models/Good.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/models/GoodCategory.php';
 
-$errmsg = "Не удалось выполнить обновление, проверьте корректность входных данных";
-$succmsg = "Товар успешно обновлен!";
+    class AdminProductController extends Controller{
 
-if(isset($_POST['saveProduct']))
-{
-    $productId = $_POST['productId'];
-    $newProductName = $_POST['newProductName'];
-    $newProductShortDescr = $_POST['newProductShortDescr'];
-    $newProductFullDescr = $_POST['newProductFullDescr'];
-    $newProductActiveFlag = $_POST['newProductActiveFlag'];
-    $newProductAmount = $_POST['newProductAmount'];
-    $newProductOrder = $_POST['newProductOrder'];
-    $newCategories = $_POST['checkCategories'];
+        public $currentProduct;
+        public $categories;
+        public $currentProductCategories;
+        public $productSaveMessage;
 
-    $result = updateProduct($productId,$newProductName,$newProductShortDescr,$newProductFullDescr,$newProductActiveFlag,$newProductAmount,$newProductOrder,$newCategories);
+        function __construct() {
+            if(empty($_GET) && empty($_POST)) { 
+                $this->init(); 
+            }else{
+                $this->parseQuery();
+            }
+        }
 
-    if($result == true)
-    {
-        header('Location: http://catalog-site.ru/admin/changeproduct.php?id=' . $_POST['productId'] . "&succ");
+        function init(){ header('Location: http://catalog-site.ru/views/404.php');exit; }
+
+        function parseQuery(){
+            if(isset($_GET['id'])){ $this->changeProduct($_GET['id']);}
+            if(isset($_POST['saveProduct'])){ $this->saveProduct($_POST['productId']);};
+        }
+
+        function changeProduct($id){
+
+            $categoryModel = new CategoryModel;
+            $goodModel = new GoodModel;
+            $goodCategory = new GoodCategoryModel;
+
+            $this->currentProduct = $goodModel->findProduct($id);
+            if($this->currentProduct == null) { $this->init();}
+            $this->categories = $categoryModel->getAllCategoryObj();
+            $this->currentProductCategories = $goodCategory->findProductCategory($id);
+        }
+
+        function saveProduct($id){
+
+            $categoryModel = new CategoryModel;
+            $goodModel = new GoodModel;
+            $goodCategory = new GoodCategoryModel;
+
+            $productId = $id;
+            $newProductName = $_POST['newProductName'];
+            $newProductShortDescr = $_POST['newProductShortDescr'];
+            $newProductFullDescr = $_POST['newProductFullDescr'];
+            $newProductActiveFlag = $_POST['newProductActiveFlag'];
+            $newProductAmount = $_POST['newProductAmount'];
+            $newProductOrder = $_POST['newProductOrder'];
+            $newCategories = $_POST['checkCategories'];
+
+            $result = $goodModel->updateProduct($productId,$newProductName,$newProductShortDescr,$newProductFullDescr,$newProductActiveFlag,$newProductAmount,$newProductOrder,$newCategories);
+
+            if($result == true)
+            {
+                $this->productSaveMessage = "Товар успешно обновлен!";
+            }
+            else{
+                $this->productSaveMessage = "Не удалось выполнить обновление, проверьте корректность входных данных";
+            }
+
+            $this->changeProduct($id);
+
+        }
+
     }
-    else{
-        header('Location: http://catalog-site.ru/admin/changeproduct.php?id=' . $_POST['productId'] . "&err");
-    }
-
-}
-else
-{
-    if (isset($_GET['id']) && $_GET['id'] >= 1 && is_numeric($_GET['id'])) {
-        $currentProductId = $_GET['id'];
-    } else {
-        header('Location: http://catalog-site.ru/views/404.php');
-        exit;
-    }  
-
-    $currentProduct = findProduct($currentProductId);
-    $categories = getAllCategoryObj();
-    $currentProductCategories = findProductCategory($currentProductId);
-}
-
 
 ?>

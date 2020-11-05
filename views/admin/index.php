@@ -1,6 +1,8 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
+    require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminCategoryController.php';
+
+    $adminController = new AdminCategoryController;
 
 ?>
 
@@ -10,8 +12,8 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="../../css/normalize.css">
+    <link rel="stylesheet" href="../../css/default.css">
     <title>catalog-site</title>
 </head>
 
@@ -27,11 +29,11 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
 
     <div class="b-main">
         <div class="main__wrapper">
-            <?php foreach ($categories as $category) 
+            <?php foreach ($adminController->categories as $category) 
             { ?>
                 <div class="b-item">
                     <div class="item__img">
-                        <img src="../img/default-good.png" alt="default photo">
+                        <img src="../../img/default-good.png" alt="default photo">
                     </div>
                     <div class="item__title">
                         <?php echo $category['categoryName'] ?>
@@ -39,31 +41,31 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
                     <div class="item__shortdescr">
                         <?php echo $category['categoryShortDescr'] ?>
                     </div>
-                    <?php if(findGoodsOnCategoryAdminExists($category['categoryId']))
+                    <?php if($category['isExists'] == 1)
                     {
                     ?>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/admin/changegoods.php?change&category=<?php echo $category['categoryId'] . "&page=1" ?>">Добавить товары</a>
+                        <a href="http://catalog-site.ru/views/admin/changegoods.php?change&category=<?php echo $category['categoryId'] . "&page=1" ?>">Добавить товары</a>
                     </div>
                     <?php 
                     } 
                     ?>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/admin/changecategory.php?change&category=<?php echo $category['categoryId']?>">Редактировать</a>
+                        <a href="http://catalog-site.ru/views/admin/changecategory.php?change&category=<?php echo $category['categoryId']?>">Редактировать</a>
                     </div>
                 </div>
             <?php
             }
-            if ($pagesCategoryCount > 1)
+            if ($adminController->pagesCategoryCount > 1)
             {
             ?>
                 <form action="index.php" method="GET">
-                    <?php if ($page > 1) { ?>
-                        <a href="?categoryPage=<?php echo $page - 1; ?>" class="main__link main__link--left">&#9668PrevPage</a>
+                    <?php if ($adminController->currentPage > 1) { ?>
+                        <a href="?categoryPage=<?php echo $adminController->currentPage - 1; ?>" class="main__link main__link--left">&#9668PrevPage</a>
                     <?php
                     } ?>
-                    <?php if ($page < $pagesCategoryCount) { ?>
-                        <a href="?categoryPage=<?php echo $page + 1; ?>" class="main__link main__link--right">NextPage&#9658</a>
+                    <?php if ($adminController->currentPage < $adminController->pagesCategoryCount) { ?>
+                        <a href="?categoryPage=<?php echo $adminController->currentPage + 1; ?>" class="main__link main__link--right">NextPage&#9658</a>
                     <?php
                     } ?>
                 </form>
@@ -91,7 +93,7 @@ require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
                     </select>
                     <button type="submit" name="category__addCategory">Добавить категорию</button>
                     <div class="new-category__errmsg">
-                        <?php if($createCategoryResult == null || false){echo $errmsg;}else{echo $succmsg;} ?>
+                        <?php echo $adminController->categoryCreateMsg ?>
                     </div>
                 </form>
             </div>
