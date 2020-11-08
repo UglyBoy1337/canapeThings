@@ -1,8 +1,6 @@
 <?php
 
-    require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminCategoryController.php';
-
-    $adminController = new AdminCategoryController;
+    include $_SERVER['DOCUMENT_ROOT'] . '/admin.php';
 
 ?>
 
@@ -29,7 +27,7 @@
 
     <div class="b-main">
         <div class="main__wrapper">
-            <?php foreach ($adminController->categories as $category) 
+            <?php foreach ($AdminCategoryController->categories as $category) 
             { ?>
                 <div class="b-item">
                     <div class="item__img">
@@ -45,27 +43,27 @@
                     {
                     ?>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/views/admin/changegoods.php?change&category=<?php echo $category['categoryId'] . "&page=1" ?>">Добавить товары</a>
+                        <a href="?change&category=<?php echo $category['categoryId'] . "&page=1" ?>">Добавить товары</a>
                     </div>
                     <?php 
                     } 
                     ?>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/views/admin/changecategory.php?change&category=<?php echo $category['categoryId']?>">Редактировать</a>
+                        <a href="?change&category=<?php echo $category['categoryId']?>">Редактировать</a>
                     </div>
                 </div>
             <?php
             }
-            if ($adminController->pagesCategoryCount > 1)
+            if ($AdminCategoryController->pagesCategoryCount > 1)
             {
             ?>
                 <form action="index.php" method="GET">
-                    <?php if ($adminController->currentPage > 1) { ?>
-                        <a href="?categoryPage=<?php echo $adminController->currentPage - 1; ?>" class="main__link main__link--left">&#9668PrevPage</a>
+                    <?php if ($AdminCategoryController->currentPage > 1) { ?>
+                        <a href="?categoryPage=<?php echo $AdminCategoryController->currentPage - 1; ?>" class="main__link main__link--left">&#9668PrevPage</a>
                     <?php
                     } ?>
-                    <?php if ($adminController->currentPage < $adminController->pagesCategoryCount) { ?>
-                        <a href="?categoryPage=<?php echo $adminController->currentPage + 1; ?>" class="main__link main__link--right">NextPage&#9658</a>
+                    <?php if ($AdminCategoryController->currentPage < $AdminCategoryController->pagesCategoryCount) { ?>
+                        <a href="?categoryPage=<?php echo $AdminCategoryController->currentPage + 1; ?>" class="main__link main__link--right">NextPage&#9658</a>
                     <?php
                     } ?>
                 </form>
@@ -79,7 +77,7 @@
                 <div class="new-category__title">
                     Форма добавления новой категории
                 </div>
-                <form action="index.php" method="POST">
+                <form action="admin.php" method="POST">
                     <div class="new-category__subtitle">Имя категории:</div>
                     <input type="text" required placeholder="Введите имя категории" name="categoryName">
                     <div class="new-category__subtitle">Краткое описание категории:</div>
@@ -93,7 +91,7 @@
                     </select>
                     <button type="submit" name="category__addCategory">Добавить категорию</button>
                     <div class="new-category__errmsg">
-                        <?php echo $adminController->categoryCreateMsg ?>
+                        <?php echo $AdminCategoryController->categoryCreateMsg ?>
                     </div>
                 </form>
             </div>

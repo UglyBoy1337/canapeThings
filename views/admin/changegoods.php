@@ -1,8 +1,6 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminGoodsController.php';
-
-$adminGoodController = new AdminGoodsController;
+include $_SERVER['DOCUMENT_ROOT'] . '/admin.php';
 
 ?>
 
@@ -48,7 +46,7 @@ $adminGoodController = new AdminGoodsController;
                     <?php echo $good['goodShortDescr']?>
                     </div>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/views/admin/changeproduct.php?id=<?php echo $good['goodId']?>">Редактировать товар</a>
+                        <a href="admin.php?id=<?php echo $good['goodId']?>">Редактировать товар</a>
                     </div>
                 </div>
             <?php
@@ -78,7 +76,7 @@ $adminGoodController = new AdminGoodsController;
                 <div class="new-goods__title">
                     Форма добавления нового товара
                 </div>
-                <form action="changegoods.php" method="POST">
+                <form action="admin.php" method="POST">
                 <textarea class="hidden" name="categoryId" rows="1"><?php echo $_GET['category'] ?></textarea>
                     <div class="new-goods__subtitle">Имя товара:</div>
                     <input type="text" required placeholder="Введите имя товара" name="goodName">
@@ -115,7 +113,7 @@ $adminGoodController = new AdminGoodsController;
             </div>
         </div>
 
-        <a href="http://catalog-site.ru/views/admin/index.php" class="nav__link">Назад</a>
+        <a href="/admin.php" class="nav__link">Назад</a>
     </div>
 
 </body>

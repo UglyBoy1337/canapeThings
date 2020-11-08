@@ -1,8 +1,6 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/GoodsController.php';
-
-$goodController = new GoodsController;
+    include $_SERVER['DOCUMENT_ROOT'] . '/index.php';
 
 ?>
 
@@ -47,7 +45,7 @@ $goodController = new GoodsController;
                     <?php echo $good['goodShortDescr']?>
                     </div>
                     <div class="item__about">
-                        <a href="product.php?id=<?php echo $good['goodId']?>">Подробнее о товаре</a>
+                        <a href="?id=<?php echo $good['goodId']?>">Подробнее о товаре</a>
                     </div>
                 </div>
             <?php 
@@ -69,7 +67,7 @@ $goodController = new GoodsController;
             <?php
             }?>
         </div>
-        <a href="http://catalog-site.ru/views/index.php" class="nav__link">Назад</a>
+        <a href="/index.php" class="nav__link">Назад</a>
     </div>
 
 </body>

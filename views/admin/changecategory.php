@@ -1,8 +1,6 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/adminCategoryController.php';
-
-$adminCategoryController = new AdminCategoryController;
+include $_SERVER['DOCUMENT_ROOT'] . '/admin.php';
 
 ?>
 
@@ -30,28 +28,28 @@ $adminCategoryController = new AdminCategoryController;
     <div class="b-change">
         <div class="change__wrapper">
             <div class="change__title">
-                Вы редактируете категорию:<?php echo $adminCategoryController->currentCategory['categoryName'] ?>
+                Вы редактируете категорию:<?php echo $AdminCategoryController->currentCategory['categoryName'] ?>
             </div>
-            <form action="changecategory.php" method="POST">
-            <textarea class="hidden" name="categoryId" rows="1"><?php echo $adminCategoryController->currentCategory['categoryId']?></textarea>
+            <form action="admin.php" method="POST">
+            <textarea class="hidden" name="categoryId" rows="1"><?php echo $AdminCategoryController->currentCategory['categoryId']?></textarea>
                 <div class="change__field-name">
                     Изменить название категории
                 </div>
-                <textarea name="newCategoryName" cols="30" rows="1" required><?php echo $adminCategoryController->currentCategory['categoryName']?></textarea>
+                <textarea name="newCategoryName" cols="30" rows="1" required><?php echo $AdminCategoryController->currentCategory['categoryName']?></textarea>
                 <div class="change__field-name">
                     Изменить краткое описание категории
                 </div>
-                <textarea name="newCategoryShortDescr" cols="30" rows="5" required><?php echo $adminCategoryController->currentCategory['categoryShortDescr']?></textarea>
+                <textarea name="newCategoryShortDescr" cols="30" rows="5" required><?php echo $AdminCategoryController->currentCategory['categoryShortDescr']?></textarea>
                 <div class="change__field-name">
                     Изменить полное описание категории
                 </div>
-                <textarea name="newCategoryFullDescr" cols="30" rows="5" required><?php echo $adminCategoryController->currentCategory['categoryFullDescr']?></textarea>
+                <textarea name="newCategoryFullDescr" cols="30" rows="5" required><?php echo $AdminCategoryController->currentCategory['categoryFullDescr']?></textarea>
                 <div class="change__field-name">
                     Изменить активность категории
                 </div>
                 <select name="newCategoryFlagActive">
                  <?php 
-                 if($adminCategoryController->currentCategory['flag_active'] == 1)
+                 if($AdminCategoryController->currentCategory['flag_active'] == 1)
                  {
                  ?>
                     <option value="1">Активна</option>
@@ -66,10 +64,10 @@ $adminCategoryController = new AdminCategoryController;
                 ?>
                 </select>
                 <button type="submit" name="saveCategory">Сохранить изменения</button>
-                <a href="http://catalog-site.ru/views/admin/index.php?categoryPage=1" class="nav__link nav__link--update-category">Назад</a>
+                <a href="?categoryPage=1" class="nav__link nav__link--update-category">Назад</a>
             </form>
             <div class="change__errmsg">
-                <?php echo $adminCategoryController->changeCategoryMessage; ?>
+                <?php echo $AdminCategoryController->changeCategoryMessage; ?>
             </div>
         </div>
      </div>

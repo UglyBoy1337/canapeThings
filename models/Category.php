@@ -1,7 +1,7 @@
 <?php
 
-require $_SERVER['DOCUMENT_ROOT'] . '/db/db_connect.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/special/headers.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/db/db_connect.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/special/headers.php';
 
 class CategoryModel extends Model{
 
@@ -9,219 +9,158 @@ class CategoryModel extends Model{
         return "hello";
     }
     
-    function getCategoryCountPages($itemsOnPage){  
-
-        global $db_link;
-    
+    function getCategoryCountPages($itemsOnPage)
+    {  
+        global $pdo;
         $query = "SELECT COUNT(*) FROM `category` WHERE flag_active = 1";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $total = mysqli_fetch_row($result);
-    
-        $total[0] = $total[0] <= 0 ? 1 : $total[0];
-    
-        return ceil($total[0]/$itemsOnPage);
+        $stmt = $pdo->query($query);
+        while ($row = $stmt->fetch()){
+            $total = $row;
+        }
+        $total["COUNT(*)"] = $total["COUNT(*)"] <= 0 ? 1 : $total["COUNT(*)"];
+        return ceil($total["COUNT(*)"]/$itemsOnPage);
     }
     
-    function getCategoryCountPagesAdmin($itemsOnPage){
-    
-        global $db_link;
-    
+    function getCategoryCountPagesAdmin($itemsOnPage)
+    {
+        global $pdo;
         $query = "SELECT COUNT(*) FROM `category`";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $total = mysqli_fetch_row($result);
-    
-        $total[0] = $total[0] <= 0 ? 1 : $total[0];
-    
-        return ceil($total[0]/$itemsOnPage);
+        $stmt = $pdo->query($query);
+        while ($row = $stmt->fetch()){
+            $total = $row;
+        }
+        $total["COUNT(*)"] = $total["COUNT(*)"] <= 0 ? 1 : $total["COUNT(*)"];
+        return ceil($total["COUNT(*)"]/$itemsOnPage);
     }
     
-    function findCategoryPaginationPages($from , $to){
-    
-        global $db_link;
-    
+    function findCategoryPaginationPages($from , $to)
+    {
+        global $pdo;
         $query = "SELECT * FROM `category` WHERE flag_active = 1 LIMIT $from,$to";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $categories = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    
+        $categories = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $categories;
     }
     
     function findCategoryPaginationPageOrder($from , $to, $condition)
     {
-        global $db_link;
-    
-        switch($condition)
-        {
+        global $pdo;
+        switch($condition){
             case "a-z":
                 $query = "SELECT * FROM `category` WHERE flag_active = 1 ORDER BY categoryName LIMIT $from,$to";
-            break;
+                break;
             case "z-a":
                 $query = "SELECT * FROM `category` WHERE flag_active = 1 ORDER BY categoryName DESC LIMIT $from,$to";
-            break;
+                break;
         }
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $categories = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    
+        $categories = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $categories;
     }
     
     
-    function findCategoryPaginationPagesAdmin($from , $to){
-    
-        global $db_link;
-    
+    function findCategoryPaginationPagesAdmin($from , $to)
+    {
+        global $pdo;
         $query = "SELECT * FROM `category` LIMIT $from,$to";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $categories = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    
+        $categories = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $categories;
     }
     
-    function findCategoryName($id){
-    
-        global $db_link;
-    
+    function findCategoryName($id)
+    {
+        global $pdo;
         $query = "SELECT `categoryName` from category WHERE categoryId = $id";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $categoryName = mysqli_fetch_assoc($result);
-    
+        $categoryName = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $categoryName['categoryName'];
     }
     
-    function findActiveCategoryCount(){
-    
-        global $db_link;
-    
+    function findActiveCategoryCount()
+    {
+        global $pdo;
         $query = "SELECT COUNT(*) FROM `category` WHERE flag_active = 1";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $total = mysqli_fetch_row($result);
-    
-        return $total[0];
-    }
-    
-    function findActiveCategoryCountAdmin(){
-    
-        global $db_link;
-    
-        $query = "SELECT COUNT(*) FROM `category`";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $total = mysqli_fetch_row($result);
-    
-        return $total[0];
-    }
-    
-    function findCategory($id){
-    
-        global $db_link;
-    
-        $query = "SELECT * FROM `category` WHERE categoryId = $id";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $category = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    
-        return $category[0];
-    }
-    
-    function findCategoryCount(){
-    
-        global $db_link;
-    
-        $query = "SELECT COUNT(*) FROM `category`";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $total = mysqli_fetch_row($result);
-    
-        return $total[0];
-    }
-    
-    function updateCategory($id,$categoryName,$categoryShortDescr,$categoryFullDescr,$flag_active){
-    
-        global $db_link;
-    
-        $categoryName =  mysqli_real_escape_string($db_link,$categoryName);
-    
-        $categoryShortDescr = mysqli_real_escape_string($db_link,$categoryShortDescr);
-    
-        $categoryFullDescr = mysqli_real_escape_string($db_link,$categoryFullDescr);
-    
-        $flag_active = mysqli_real_escape_string($db_link,$flag_active);
-    
-        if(!empty($categoryName) && !empty($categoryShortDescr) && !empty($categoryFullDescr) && ($flag_active == 1 || $flag_active == 0) )
-        {
-            $query = "UPDATE `category` SET categoryName = '$categoryName', categoryShortDescr = '$categoryShortDescr', categoryFullDescr = '$categoryFullDescr', flag_active = '$flag_active' WHERE categoryId = '$id'";
-         
-            $result = mysqli_query($db_link,$query);
-    
-            return $result;
+        $stmt = $pdo->query($query);
+        while ($row = $stmt->fetch()){
+            $total = $row;
         }
-    
-        return false;
-    
+        return $total["COUNT(*)"];
     }
     
-    function findCategoryFullDescr($id){
+    function findActiveCategoryCountAdmin()
+    {
+        global $pdo;
+        $query = "SELECT COUNT(*) FROM `category`";
+        $stmt = $pdo->query($query);
+        while ($row = $stmt->fetch()){
+            $total = $row;
+        }
+        return $total["COUNT(*)"];
+    }
     
-        global $db_link;
+    function findCategory($id)
+    {
+        global $pdo;
+        $query = "SELECT * FROM `category` WHERE categoryId = $id";
+        $result = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        return $result[0];
+    }
     
+    function findCategoryCount()
+    {
+        global $pdo;
+        $query = "SELECT COUNT(*) FROM `category`";
+        $stmt = $pdo->query($query);
+        while ($row = $stmt->fetch()){
+            $total = $row;
+        }
+        return $total["COUNT(*)"];
+    }
+    
+    function updateCategory($saveCategory)
+    {
+        global $pdo;
+        $query = "UPDATE `category` SET categoryName =" . "'" . 
+        $saveCategory['name'] . "', categoryShortDescr = '" . 
+        $saveCategory['shortDescr'] . "', categoryFullDescr = '" .
+        $saveCategory['fullDescr'] . "', flag_active = '" . 
+        $saveCategory['flag'] . "' WHERE categoryId =" .
+        $saveCategory['id'];
+        $result = $pdo->query($query);
+        return $result;
+    }
+    
+    function findCategoryFullDescr($id)
+    {
+        global $pdo;   
         $query = "SELECT categoryFullDescr FROM `category` WHERE categoryId = $id";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $categoryFullDescr = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    
+        $categoryFullDescr = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $categoryFullDescr[0]['categoryFullDescr'];
     }
     
-    function getAllCategoryObj(){
-    
-        global $db_link;
-    
+    function getAllCategoryObj()
+    {
+        global $pdo;
         $query = "SELECT * FROM `category`";
-    
-        $result = mysqli_query($db_link,$query);
-    
-        $categories = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    
+        $categories = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         return $categories;
     }
     
-    function createNewCategory($categoryName,$categoryShortDescr,$categoryFullDescr,$flag_active){
-    
-        global $db_link;
-    
-        $categoryName = mysqli_real_escape_string($db_link,$categoryName);
-    
-        $categoryShortDescr = mysqli_real_escape_string($db_link,$categoryShortDescr);
-    
-        $categoryFullDescr = mysqli_real_escape_string($db_link,$categoryFullDescr);
-    
-        $flag_active = mysqli_real_escape_string($db_link,$flag_active);
-    
-        if(!empty($categoryName) && !empty($categoryShortDescr) && !empty($categoryFullDescr) && ($flag_active == 1 || $flag_active == 0) )
-        {
-            $query = "INSERT INTO category(categoryName,categoryShortDescr,categoryFullDescr,flag_active) VALUES('$categoryName','$categoryShortDescr','$categoryFullDescr','$flag_active')";
-         
-            $result = mysqli_query($db_link,$query);
-    
-            return $result;
+    function createNewCategory($newCategory)
+    {
+        global $pdo;
+        $query = "INSERT INTO category(categoryName,categoryShortDescr,categoryFullDescr,flag_active) VALUES('" .
+        $newCategory['name'] . "','" . 
+        $newCategory['shortDescr'] . "','" . 
+        $newCategory['fullDescr'] . "','" . 
+        $newCategory['flag'] . "')"; 
+        $result = $pdo->query($query);
+        return $result;
+    }
+
+    function validate($category)
+    {
+        if(!empty($category['name']) && !empty($category['shortDescr']) && 
+           !empty($category['fullDescr']) && ($category['flag'] == 1 || 
+           $category['flag'] == 0) ){
+            return true;     
         }
         return false;
     }

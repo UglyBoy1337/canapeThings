@@ -1,8 +1,6 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/AdminProductController.php';
-
-$adminProductController = new AdminProductController;
+include $_SERVER['DOCUMENT_ROOT'] . '/admin.php';
 
 ?>
 
@@ -32,7 +30,7 @@ $adminProductController = new AdminProductController;
             <div class="change__title">
                 Вы редактируете товар:<?php echo $adminProductController->currentProduct['goodName'] ?>
             </div>
-            <form action="changeproduct.php" method="POST">
+            <form action="admin.php" method="POST">
             <textarea class="hidden" name="productId" rows="1"><?php echo $adminProductController->currentProduct['goodId']?></textarea>
                 <div class="change__field-name">
                     Изменить название товара
@@ -116,7 +114,7 @@ $adminProductController = new AdminProductController;
                       }
                     ?>
                 <button type="submit" name="saveProduct">Сохранить изменения</button>
-                <a href="http://catalog-site.ru/views/admin/index.php?categoryPage=1" class="nav__link nav__link--update-category">Назад</a>
+                <a href="admin.php" class="nav__link nav__link--update-category">Назад</a>
             </form>
             <div class="change__errmsg">
                 <?php echo $adminProductController->productSaveMessage ?>

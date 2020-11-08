@@ -1,8 +1,6 @@
 <?php
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/controllers/CategoryController.php';
-
-$CategoryConroller = new CategoryController;
+    include $_SERVER['DOCUMENT_ROOT'] . '/index.php';
 
 ?>
 
@@ -54,7 +52,7 @@ $CategoryConroller = new CategoryController;
                         <?php echo $category['categoryShortDescr'] ?>
                     </div>
                     <div class="item__about">
-                        <a href="http://catalog-site.ru/views/about.php?category=<?php echo $category['categoryId'] . "&page=1" ?>">Подробнее</a>
+                        <a href="?category=<?php echo $category['categoryId'] . "&page=1" ?>">Подробнее</a>
                     </div>
                 </div>
             <?php
