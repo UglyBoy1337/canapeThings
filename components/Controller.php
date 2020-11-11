@@ -5,5 +5,4 @@ abstract class Controller{
     abstract protected function __construct();
 }
 
-
 ?>

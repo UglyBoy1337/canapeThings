@@ -36,7 +36,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin.php';
                 { 
                 ?>
                 <div class="b-item">
-                    <div class="item__img">
+                    <div class="item__img" data-id="<?php echo $good['goodId'] ?>">
                         <img src="../../img/default-good.png" alt="default photo">
                     </div>
                     <div class="item__title">
@@ -113,7 +113,22 @@ include $_SERVER['DOCUMENT_ROOT'] . '/admin.php';
             </div>
         </div>
 
+        <div class="b-modalProduct">
+            <div class="modalProduct__layout">
+                <div class="modalProduct__title">Товар:</div>
+                <div class="modalProduct__description">Полное описание:</div>
+                <div class="modalProduct__categories">Категории:</div>
+                <div class="modalProduct__isOrder">Возможность заказать в случае отстуствия:</div>
+                <div class="modalProduct__count">Кол-во:</div>
+                <svg class="modal__cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z"/></svg>
+            </div>
+        </div>
+
+        <div class="overlay" id="overlay-modal"></div>
+
         <a href="/admin.php" class="nav__link">Назад</a>
+        <script src="../../js/libs/jquery.js"></script>
+        <script src="../../js/showProduct.js"></script>                   
     </div>
 
 </body>

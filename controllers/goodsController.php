@@ -31,21 +31,21 @@ class GoodsController extends Controller{
         $itemsOnPage = 3;
         $this->goodCountPages = $goodModel->getGoodsCountPages($itemsOnPage,$_GET['category']);
         $this->categoryPagesCount = $categoryModel->findActiveCategoryCount();
-        if (isset($_GET['category']) && $_GET['category'] >= 1 && $_GET['category'] <= $this->categoryPagesCount+1 && is_numeric($_GET['category']) 
-        && isset($_GET['page']) && $_GET['page'] >= 1 && $_GET['page'] <= $this->goodCountPages
-        && is_numeric($_GET['page'])){
-            $categoryPage= $_GET['category'];
-            $this->currentPage = $_GET['page'];
-        } else {  
-            include $_SERVER['DOCUMENT_ROOT'] . '/views/404.php';exit; 
+        $categoryPage= $_GET['category'];
+        $this->currentPage = $_GET['page'];
+        if($categoryPage == null || $this->currentPage == null || is_numeric($categoryPage) == false || is_numeric($this->currentPage) == false){
+            include $_SERVER['DOCUMENT_ROOT'] . '/views/404.php';exit;
         }
         $from = ($this->currentPage - 1) * $itemsOnPage;
-        $this->goods = $goodModel->findGoodsOnCategory($from,$itemsOnPage, $_GET['category']);    
+        $this->goods = $goodModel->findGoodsOnCategory($from,$itemsOnPage, $_GET['category']);   
+        if($this->goods == null || $this->goods == false){
+            include $_SERVER['DOCUMENT_ROOT'] . '/views/404.php';exit;
+        } 
         $this->categoryName = $categoryModel->findCategoryName($categoryPage);
         $this->categoryFullDescr = $categoryModel->findCategoryFullDescr($categoryPage);
         include_once $_SERVER['DOCUMENT_ROOT'] . '/views/about.php';
     }
 
-    }
+}
 
 ?>

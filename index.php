@@ -20,5 +20,9 @@
         $ProductController = new ProductController;
     }
 
+    if(isset($_GET['modalId'])){
+        $ProductController = new ProductController;
+    }
+
 
 ?>

@@ -70,7 +70,7 @@ class CategoryModel extends Model{
         global $pdo;
         $query = "SELECT `categoryName` from category WHERE categoryId = $id";
         $categoryName = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
-        return $categoryName['categoryName'];
+        return $categoryName[0]['categoryName'];
     }
     
     function findActiveCategoryCount()

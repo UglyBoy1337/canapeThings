@@ -24,14 +24,17 @@ class ProductController extends Controller
     }
 
     function parseQuery(){
+        if(isset($_GET['id'])){
+            $this->render($_GET['id']);
+        }
+        if(isset($_GET['modalId'])){
+            $this->getData($_GET['modalId']);
+        }
+    }
+
+    function render($productId){
         $categoryGoodModel = new GoodCategoryModel;
         $productModel = new GoodModel;
-        $productId = null;
-        if(isset($_GET['id']) && $_GET['id'] >= 1 && $_GET['id']  && is_numeric($_GET['id'])){
-            $productId = $_GET['id'];
-        }else{ 
-            include $_SERVER['DOCUMENT_ROOT'] . '/views/404.php';exit;
-        }
         $product = $productModel->findProduct($productId);
         if($product == false || $product['flag_active'] == 0){
             include $_SERVER['DOCUMENT_ROOT'] . '/views/404.php';exit; 
@@ -39,6 +42,24 @@ class ProductController extends Controller
         $this->product = $product;
         $this->productcategories = $categoryGoodModel->findProductCategory($productId);
         include_once $_SERVER['DOCUMENT_ROOT'] . '/views/product.php';
+    }
+
+    function getData($productId){
+        $categoryGoodModel = new GoodCategoryModel;
+        $productModel = new GoodModel;
+        
+        $product = $productModel->findProduct($productId);
+        if($product == false || $product['flag_active'] == 0){
+            return false;
+        }
+        $categoryObject = $categoryGoodModel->findProductCategory($productId);
+        $categories = [];
+        foreach($categoryObject as $category){
+            array_push($categories, $category['categoryName']);
+        }
+
+        $product['categories'] = $categories;
+        echo json_encode($product, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
     }
 
 }
